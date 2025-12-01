@@ -1,5 +1,3 @@
-// PLANNING
-
 // store gameboard as an array inside of a Gameboard object.
 const Gameboard = (function () {
     const board = ['', '', '', '', '', '', '', '', ''];
@@ -17,9 +15,10 @@ const Gameboard = (function () {
         board[index] = marker;
         totalMoves++;
 
-        if(totalMoves >= 5){
+        if( totalMoves >= 5 && totalMoves <= 9){
             console.log(checkWinConditions(marker));
         };
+
     }
 
     function getTotalMoves(){
@@ -46,7 +45,6 @@ const Gameboard = (function () {
 
         return(winnerExists);
     }
-
     return {
         getBoard,
         placeMarker,
@@ -67,9 +65,17 @@ function createPlayer(name, marker){
     }
 };
 
+function checkEndOfGame(){
+    let totalMoves = Gameboard.getTotalMoves();
+    if(totalMoves>= 9){
+        console.log('end of game!');
+    };
+}
+
 function handlePlayerMove(player, index){
     // check validity of index?
     player.placeMarker(index);
+    checkEndOfGame();
 }
 
 // use object to control the flow of the game
@@ -80,11 +86,7 @@ function gameFlow(){
 
     // Players place markers
     handlePlayerMove(playerOne, 0);
-    handlePlayerMove(playerTwo,3);
-    handlePlayerMove(playerOne, 3);
-    handlePlayerMove(playerOne, 1);
-    handlePlayerMove(playerTwo, 4);
-    handlePlayerMove(playerOne, 2);    
+    handlePlayerMove(playerTwo,1);
 }
 
 function displayController(){

@@ -76,15 +76,17 @@ function gameFlow(playerOne, playerTwo){
     }
 
     function handlePlayerMove(index){
-        if(!currPlayer.placeMarker(index) || !gameOver){
-            switchTurn();
+        if (gameOver) {
+            return;
         }
 
-        if(Gameboard.checkWinConditions(currPlayer.marker)){
-            console.log('game over!')
-            winner = currPlayer;
-            gameOver = true;
-        }
+        if(currPlayer.placeMarker(index)){
+            if(Gameboard.checkWinConditions(currPlayer.marker)){
+                winner = currPlayer;
+                gameOver = true;
+            }
+            switchTurn();
+        } 
     }
 
     function getWinner(){

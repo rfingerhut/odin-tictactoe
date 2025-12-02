@@ -1,28 +1,36 @@
+const { getDefaultSettings } = require("http2");
+
 // store gameboard as an array inside of a Gameboard object.
 const Gameboard = (function () {
     const board = ['', '', '', '', '', '', '', '', ''];
-    let totalMoves = 0;
+
+    function getTotalMarkers(){
+        let numOfMarkers = 0;
+        board.forEach((el) => {
+            (el !== '') ? numOfMarkers++ : '';
+        })
+        return numOfMarkers;
+    }
     
     function getBoard(){
-        return board
+        return board.slice();
     };
 
-    function placeMarker(index, marker){
-        if (board[index] != ''){
-            return;
-        }
-
-        board[index] = marker;
-        totalMoves++;
-
-        if( totalMoves >= 5 && totalMoves <= 9){
-            console.log(checkWinConditions(marker));
-        };
-
+    function clearBoard(){
+        board.fill('');
     }
 
-    function getTotalMoves(){
-        return totalMoves;
+    function placeMarker(index, marker){
+        if (!checkEmptyCell(index)){
+            return false;
+        } else {
+            board[index] = marker;
+            return true;
+        }
+    }
+
+    function checkEmptyCell(index){
+        return (board[index] === '');
     }
 
     function checkWinConditions(marker){
@@ -40,22 +48,24 @@ const Gameboard = (function () {
             [0,4,8], [2,4,6]
         ];
         
-        // check to see if winPatterns includes markedIndexes
         const winnerExists = winPatterns.some(pattern => pattern.every(el => markedIndexes.includes(el)));
 
         return(winnerExists);
     }
+
     return {
         getBoard,
         placeMarker,
-        getTotalMoves,
+        checkWinConditions,
+        clearBoard,
     }
 })();
 
-// store players in objects
+
 function createPlayer(name, marker){
+
     function placeMarker(index){
-        Gameboard.placeMarker(index, marker);
+        return(Gameboard.placeMarker(index, marker));
     }
 
     return {
@@ -65,32 +75,57 @@ function createPlayer(name, marker){
     }
 };
 
-function checkEndOfGame(){
-    let totalMoves = Gameboard.getTotalMoves();
-    if(totalMoves>= 9){
-        console.log('end of game!');
-    };
-}
+function gameFlow(playerOne, playerTwo){
+    let currPlayer = playerOne;
+    let winner = '';
+    let gameOver = false;
 
-function handlePlayerMove(player, index){
-    // check validity of index?
-    player.placeMarker(index);
-    checkEndOfGame();
-}
+    function switchTurn(){
+        (currPlayer === playerOne) ? currPlayer = playerTwo : currPlayer = playerOne;
+    }
 
-// use object to control the flow of the game
-function gameFlow(){
-    // creates players
-    const playerOne = createPlayer('Rachel', 'X');
-    const playerTwo = createPlayer('Kyle', 'O');
+    function handlePlayerMove(index){
+        if(!Gameboard.checkWinConditions(currPlayer.marker) && !gameOver){
+            if(currPlayer.placeMarker(index)){
+                switchTurn();
+            }
+        } else {
+            console.log('game over!')
+            winner = currPlayer;
+            gameOver = true;
+        }
+    }
 
-    // Players place markers
-    handlePlayerMove(playerOne, 0);
-    handlePlayerMove(playerTwo,1);
+    function getWinner(){
+        return winner;
+    }
+
+    function getCurrPlayer(){
+        return currPlayer;
+    }
+
+    function reset(){
+        Gameboard.clearBoard();
+        winner = '';
+        currPlayer = playerOne;
+        gameOver = false;
+    }
+
+    return{
+        handlePlayerMove,
+        getCurrPlayer,
+        getWinner,
+        reset,
+    }
+
 }
 
 function displayController(){
 
 }
 
-gameFlow();
+
+
+
+
+

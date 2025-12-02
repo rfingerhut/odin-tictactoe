@@ -1,16 +1,7 @@
 const { getDefaultSettings } = require("http2");
 
-// store gameboard as an array inside of a Gameboard object.
 const Gameboard = (function () {
     const board = ['', '', '', '', '', '', '', '', ''];
-
-    function getTotalMarkers(){
-        let numOfMarkers = 0;
-        board.forEach((el) => {
-            (el !== '') ? numOfMarkers++ : '';
-        })
-        return numOfMarkers;
-    }
     
     function getBoard(){
         return board.slice();
@@ -85,11 +76,11 @@ function gameFlow(playerOne, playerTwo){
     }
 
     function handlePlayerMove(index){
-        if(!Gameboard.checkWinConditions(currPlayer.marker) && !gameOver){
-            if(currPlayer.placeMarker(index)){
-                switchTurn();
-            }
-        } else {
+        if(!currPlayer.placeMarker(index) || !gameOver){
+            switchTurn();
+        }
+
+        if(Gameboard.checkWinConditions(currPlayer.marker)){
             console.log('game over!')
             winner = currPlayer;
             gameOver = true;
@@ -123,9 +114,5 @@ function gameFlow(playerOne, playerTwo){
 function displayController(){
 
 }
-
-
-
-
 
 

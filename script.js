@@ -54,7 +54,6 @@ const Gameboard = (function () {
 
 
 function createPlayer(name, marker){
-
     function placeMarker(index){
         return(Gameboard.placeMarker(index, marker));
     }
@@ -110,11 +109,12 @@ function gameFlow(playerOne, playerTwo){
         getWinner,
         reset,
     }
-
 }
 
 function displayController(){
+    function render(){
 
+    }
 }
 
 

@@ -1,5 +1,3 @@
-const { getDefaultSettings } = require("http2");
-
 const Gameboard = (function () {
     const board = ['', '', '', '', '', '', '', '', ''];
     
@@ -111,10 +109,34 @@ function gameFlow(playerOne, playerTwo){
     }
 }
 
-function displayController(){
-    function render(){
+const displayController = (function(){
+    // const boardContainer = document.getElementById('board-container');
 
+    function renderGameboard(){
+        const boardContainer = document.getElementById('board-container')
+        const grid = document.createElement('div');
+        grid.classList.add('grid');
+
+        let board = Gameboard.getBoard();
+
+        board.forEach((element, index) => {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.id = index;
+            cell.textContent = element;
+            grid.appendChild(cell);
+        });
+        boardContainer.appendChild(grid);
     }
-}
 
+    function render(){
+        renderGameboard();
+    }
 
+    return {
+        render,
+    };
+
+})();
+
+displayController.renderGameboard();

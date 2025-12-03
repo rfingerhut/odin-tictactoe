@@ -110,33 +110,46 @@ function gameFlow(playerOne, playerTwo){
 }
 
 const displayController = (function(){
-    // const boardContainer = document.getElementById('board-container');
+    const playerTurnContainer = document.getElementById('player-turn-container');
+    const boardContainer = document.getElementById('board-container');
+    const buttonsContainer = document.getElementById('buttons-container');
+
+    function init(){
+        renderGameboard();
+        
+    }
 
     function renderGameboard(){
-        const boardContainer = document.getElementById('board-container')
+        boardContainer.textContent = '';
         const grid = document.createElement('div');
         grid.classList.add('grid');
-
+        
         let board = Gameboard.getBoard();
 
         board.forEach((element, index) => {
             const cell = document.createElement('div');
             cell.classList.add('cell');
-            cell.id = index;
+            cell.dataset.id = index;
             cell.textContent = element;
+            cell.addEventListener('click', handleCellClick)
             grid.appendChild(cell);
         });
         boardContainer.appendChild(grid);
     }
 
-    function render(){
+    function handleCellClick(e){
+        const index = e.target.dataset.id;
+        console.log(index);
+
+        game.handlePlayerMove(index);
+
         renderGameboard();
     }
 
     return {
-        render,
+        init,
     };
 
 })();
 
-displayController.renderGameboard();
+displayController.init();

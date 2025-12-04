@@ -109,14 +109,21 @@ function gameFlow(playerOne, playerTwo){
     }
 }
 
+const playerOne = createPlayer("Player 1", "X");
+const playerTwo = createPlayer("Player 2", "O");
+const game = gameFlow(playerOne, playerTwo);
+
 const displayController = (function(){
     const playerTurnContainer = document.getElementById('player-turn-container');
     const boardContainer = document.getElementById('board-container');
     const buttonsContainer = document.getElementById('buttons-container');
+    const currPlayerName = document.createElement('h2');
+    const currPlayerMark =  document.createElement('h2');
+
 
     function init(){
         renderGameboard();
-        
+        renderButtonsContainer();
     }
 
     function renderGameboard(){
@@ -135,14 +142,32 @@ const displayController = (function(){
             grid.appendChild(cell);
         });
         boardContainer.appendChild(grid);
+
+        currPlayerName.textContent = game.getCurrPlayer().name; 
+        currPlayerMark.textContent = game.getCurrPlayer().marker;
+        playerTurnContainer.append(currPlayerName, currPlayerMark);
+    }
+
+    function renderButtonsContainer(){
+        const newGameButton = document.createElement('button');
+        newGameButton.classList.add('newGameButton');
+        newGameButton.textContent = 'New Game'
+
+        newGameButton.addEventListener('click', handleNewGameClick);
+
+        buttonsContainer.appendChild(newGameButton);
     }
 
     function handleCellClick(e){
         const index = e.target.dataset.id;
-        console.log(index);
 
         game.handlePlayerMove(index);
 
+        renderGameboard();
+    }
+
+    function handleNewGameClick(){
+        game.reset();
         renderGameboard();
     }
 

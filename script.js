@@ -118,8 +118,6 @@ const displayController = (function(){
     const boardContainer = document.getElementById('board-container');
     const buttonsContainer = document.getElementById('buttons-container');
     const currPlayerName = document.createElement('h2');
-    const currPlayerMark =  document.createElement('h2');
-
 
     function init(){
         renderGameboard();
@@ -143,9 +141,8 @@ const displayController = (function(){
         });
         boardContainer.appendChild(grid);
 
-        currPlayerName.textContent = game.getCurrPlayer().name; 
-        currPlayerMark.textContent = game.getCurrPlayer().marker;
-        playerTurnContainer.append(currPlayerName, currPlayerMark);
+        currPlayerName.textContent = `${game.getCurrPlayer().name}'s turn`; 
+        playerTurnContainer.appendChild(currPlayerName);
     }
 
     function renderButtonsContainer(){

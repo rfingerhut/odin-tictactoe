@@ -42,10 +42,15 @@ const Gameboard = (function () {
         return(winnerExists);
     }
 
+    function checkTieConditions(){
+        return (board.every(cell => cell != ''));
+    }
+
     return {
         getBoard,
         placeMarker,
         checkWinConditions,
+        checkTieConditions,
         clearBoard,
     }
 })();
@@ -81,6 +86,8 @@ function gameFlow(playerOne, playerTwo){
             if(Gameboard.checkWinConditions(currPlayer.marker)){
                 winner = currPlayer;
                 gameOver = true;
+            } else if (Gameboard.checkTieConditions()){
+                winner = 'tie';
             } else {
                 switchTurn();
             }
@@ -119,7 +126,6 @@ const displayController = (function(){
     const boardContainer = document.getElementById('board-container');
     const buttonsContainer = document.getElementById('buttons-container');
     const currPlayerName = document.createElement('h2');
-    const winnerContainer = document.getElementById('winner-container');
     const winningPlayer = document.createElement('h2');
 
     function init(){
@@ -170,9 +176,15 @@ const displayController = (function(){
     
     function renderWinnerDisplay(){
         currPlayerName.remove();
-        winningPlayer.textContent = `${game.getCurrPlayer().name} wins!`;
+
+        if (game.getWinner() == 'tie'){
+            winningPlayer.textContent = `Sorry ${playerOne.name} and ${playerTwo.name}, it's a tie!`;
+        } else {
+            winningPlayer.textContent = `${game.getCurrPlayer().name} wins!`;
+        }
         playerTurnContainer.appendChild(winningPlayer);
     }
+
 
     function handleCellClick(e){
         const index = e.target.dataset.id;
@@ -184,9 +196,7 @@ const displayController = (function(){
         } else {
             renderGameboard();
             renderPlayerTurn();
-        }
-        
-        
+        } 
     }
 
     function handleNewGameClick(){

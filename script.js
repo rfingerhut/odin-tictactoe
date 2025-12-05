@@ -81,8 +81,9 @@ function gameFlow(playerOne, playerTwo){
             if(Gameboard.checkWinConditions(currPlayer.marker)){
                 winner = currPlayer;
                 gameOver = true;
+            } else {
+                switchTurn();
             }
-            switchTurn();
         } 
     }
 
@@ -118,11 +119,20 @@ const displayController = (function(){
     const boardContainer = document.getElementById('board-container');
     const buttonsContainer = document.getElementById('buttons-container');
     const currPlayerName = document.createElement('h2');
+    const winnerContainer = document.getElementById('winner-container');
+    const winningPlayer = document.createElement('h2');
 
     function init(){
+        renderPlayerTurn();
         renderGameboard();
         renderButtonsContainer();
     }
+
+    function gameOver(){
+        renderWinnerDisplay();
+        renderGameboard();
+    }
+    
 
     function renderGameboard(){
         boardContainer.textContent = '';
@@ -140,7 +150,9 @@ const displayController = (function(){
             grid.appendChild(cell);
         });
         boardContainer.appendChild(grid);
+    }
 
+    function renderPlayerTurn(){
         currPlayerName.textContent = `${game.getCurrPlayer().name}'s turn`; 
         playerTurnContainer.appendChild(currPlayerName);
     }
@@ -155,17 +167,33 @@ const displayController = (function(){
         buttonsContainer.appendChild(newGameButton);
     }
 
+    
+    function renderWinnerDisplay(){
+        currPlayerName.remove();
+        winningPlayer.textContent = `${game.getCurrPlayer().name} wins!`;
+        playerTurnContainer.appendChild(winningPlayer);
+    }
+
     function handleCellClick(e){
         const index = e.target.dataset.id;
 
         game.handlePlayerMove(index);
 
-        renderGameboard();
+        if (game.getWinner() != ''){
+            gameOver();
+        } else {
+            renderGameboard();
+            renderPlayerTurn();
+        }
+        
+        
     }
 
     function handleNewGameClick(){
         game.reset();
+        winningPlayer.remove();
         renderGameboard();
+        renderPlayerTurn();
     }
 
     return {

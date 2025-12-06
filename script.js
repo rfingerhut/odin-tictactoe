@@ -117,21 +117,45 @@ function gameFlow(playerOne, playerTwo){
     }
 }
 
-const playerOne = createPlayer("Player 1", "X");
-const playerTwo = createPlayer("Player 2", "O");
-const game = gameFlow(playerOne, playerTwo);
+const playerOneDefault = { name: "Player 1", marker: "X" };
+const playerTwoDefault = { name: "Player 2", marker: "O" };
+let game = null;
+
+function startGame(p1, p2){
+    const playerOne = createPlayer(p1 || playerOneDefault.name, 'X' || playerOneDefault.marker);
+    const playerTwo = createPlayer(p2 || playerTwoDefault.name, 'O' || playerTwoDefault.marker);
+    game = gameFlow(playerOne, playerTwo);
+}
 
 const displayController = (function(){
+    const gameScreen = document.getElementById('game-screen');
+    const welcomeScreen = document.getElementById('welcome-screen');
     const playerTurnContainer = document.getElementById('player-turn-container');
     const boardContainer = document.getElementById('board-container');
     const buttonsContainer = document.getElementById('buttons-container');
     const currPlayerName = document.createElement('h2');
     const winningPlayer = document.createElement('h2');
 
-    function init(){
-        renderPlayerTurn();
+    const enterGameButton = document.getElementById('enter-game-button');
+    enterGameButton.addEventListener('click', handleEnterGameClick);
+
+    const closeGameButton = document.getElementById('close-game-button');
+    closeGameButton.addEventListener('click', showWelcomeScreen);
+
+    function initGame(){
         renderGameboard();
+        renderPlayerTurn();
         renderButtonsContainer();
+    }
+
+    function showGameScreen(){
+        gameScreen.style.display = 'block';
+        welcomeScreen.style.display = 'none';
+    }
+
+    function showWelcomeScreen(){
+        welcomeScreen.style.display = 'block';
+        gameScreen.style.display = 'none';
     }
 
     function gameOver(){
@@ -139,7 +163,6 @@ const displayController = (function(){
         renderGameboard();
     }
     
-
     function renderGameboard(){
         boardContainer.textContent = '';
         const grid = document.createElement('div');
@@ -173,18 +196,16 @@ const displayController = (function(){
         buttonsContainer.appendChild(newGameButton);
     }
 
-    
     function renderWinnerDisplay(){
         currPlayerName.remove();
 
         if (game.getWinner() == 'tie'){
-            winningPlayer.textContent = `Sorry ${playerOne.name} and ${playerTwo.name}, it's a tie!`;
+            winningPlayer.textContent = `It's a tie!`;
         } else {
             winningPlayer.textContent = `${game.getCurrPlayer().name} wins!`;
         }
         playerTurnContainer.appendChild(winningPlayer);
     }
-
 
     function handleCellClick(e){
         const index = e.target.dataset.id;
@@ -206,10 +227,17 @@ const displayController = (function(){
         renderPlayerTurn();
     }
 
+    function handleEnterGameClick(){
+        playerOneName = document.getElementById('player-one-name').value;
+        playerTwoName = document.getElementById('player-two-name').value;
+        startGame(playerOneName, playerTwoName);
+        initGame();
+        showGameScreen();
+    }
+
     return {
-        init,
+        initGame,
     };
 
 })();
 
-displayController.init();

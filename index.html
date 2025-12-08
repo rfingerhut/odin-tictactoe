@@ -9,22 +9,26 @@
 </head>
 <body>
     <div class="welcomeContainer" id="welcome-screen">
-        <h2>Welcome!</h2>
-        <p>Enter player names below</p>
-        <div>
-            <label for="player-one-name">Player 1</label>
-            <input type="text" name="player-one-name" id="player-one-name">
-            <label for="plaer-two-name">Player 2</label>
-            <input type="text" name="player-two-name" id="player-two-name">
-            <button id="enter-game-button">Enter Game</button>
+        <h2>TIC TAC TOE</h2>
+        <div class="inputContainer">
+            <p>Enter player names below</p>
+            <div>
+                <label for="player-one-name">Player 1</label>
+                <input type="text" name="player-one-name" id="player-one-name" required>
+            </div>
+            <div>
+                <label for="plaer-two-name">Player 2</label>
+                <input type="text" name="player-two-name" id="player-two-name" required>
+            </div>
+            <button class='button' id="enter-game-button">Enter Game</button>
         </div>
     </div>
     <div class="gameContainer" id="game-screen">
-        <button id="close-game-button">X</button>
-        <div class="playerTurnContainer" id="player-turn-container"></div>
-        <div class="gameboardContainer" id="board-container"></div>
-        <div class="buttonsContainer" id="buttons-container"></div>
-        <div class="winnerContainer" id="winner-container"></div>
+        <button id="close-game-button">X Close</button>
+        <div class="playerTurnContainer keep" id="player-turn-container"></div>
+        <div class="gameboardContainer keep" id="board-container"></div>
+        <div class="buttonsContainer keep" id="buttons-container"></div>
+        <div class="winnerContainer keep" id="winner-container"></div>
     </div>
 </body>
 </html>

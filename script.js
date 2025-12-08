@@ -1,3 +1,6 @@
+
+// TODO: COMMIT TO GIT ANNNDDDD FIX THE ADDING OF MORE BUTTONS??
+
 const Gameboard = (function () {
     const board = ['', '', '', '', '', '', '', '', ''];
     
@@ -117,15 +120,30 @@ function gameFlow(playerOne, playerTwo){
     }
 }
 
-const playerOneDefault = { name: "Player 1", marker: "X" };
-const playerTwoDefault = { name: "Player 2", marker: "O" };
-let game = null;
 
-function startGame(p1, p2){
-    const playerOne = createPlayer(p1 || playerOneDefault.name, 'X' || playerOneDefault.marker);
-    const playerTwo = createPlayer(p2 || playerTwoDefault.name, 'O' || playerTwoDefault.marker);
-    game = gameFlow(playerOne, playerTwo);
-}
+
+const gameController = (function(){
+    const playerOneDefault = { name: "Player 1", marker: "X" };
+    const playerTwoDefault = { name: "Player 2", marker: "O" };
+    let game = null;
+
+    function startGame(p1Name, p2Name){
+        const playerOne = createPlayer(p1Name || playerOneDefault.name, playerOneDefault.marker);
+        const playerTwo = createPlayer(p2Name || playerTwoDefault.name, playerTwoDefault.marker);
+        game = gameFlow(playerOne, playerTwo);
+    }
+
+    function getGame(){
+        return game;
+    }
+
+    return{
+        startGame,
+        getGame,
+    }
+})();
+
+
 
 const displayController = (function(){
     const gameScreen = document.getElementById('game-screen');
@@ -140,7 +158,7 @@ const displayController = (function(){
     enterGameButton.addEventListener('click', handleEnterGameClick);
 
     const closeGameButton = document.getElementById('close-game-button');
-    closeGameButton.addEventListener('click', showWelcomeScreen);
+    closeGameButton.addEventListener('click', handleCloseGameClick);
 
     function initGame(){
         renderGameboard();
@@ -149,12 +167,12 @@ const displayController = (function(){
     }
 
     function showGameScreen(){
-        gameScreen.style.display = 'block';
+        gameScreen.style.display = 'grid';
         welcomeScreen.style.display = 'none';
     }
 
     function showWelcomeScreen(){
-        welcomeScreen.style.display = 'block';
+        welcomeScreen.style.display = 'flex';
         gameScreen.style.display = 'none';
     }
 
@@ -163,6 +181,8 @@ const displayController = (function(){
         renderGameboard();
     }
     
+
+    // CREATES ELEMENT
     function renderGameboard(){
         boardContainer.textContent = '';
         const grid = document.createElement('div');
@@ -182,27 +202,29 @@ const displayController = (function(){
     }
 
     function renderPlayerTurn(){
-        currPlayerName.textContent = `${game.getCurrPlayer().name}'s turn`; 
+        currPlayerName.textContent = `${gameController.getGame().getCurrPlayer().name}'s turn`; 
         playerTurnContainer.appendChild(currPlayerName);
     }
 
+    // CREATES ELEMENT
     function renderButtonsContainer(){
         const newGameButton = document.createElement('button');
-        newGameButton.classList.add('newGameButton');
-        newGameButton.textContent = 'New Game'
+        newGameButton.classList.add('button');
+        newGameButton.textContent = 'New Game';
 
         newGameButton.addEventListener('click', handleNewGameClick);
 
         buttonsContainer.appendChild(newGameButton);
+
     }
 
     function renderWinnerDisplay(){
         currPlayerName.remove();
 
-        if (game.getWinner() == 'tie'){
+        if (gameController.getGame().getWinner() == 'tie'){
             winningPlayer.textContent = `It's a tie!`;
         } else {
-            winningPlayer.textContent = `${game.getCurrPlayer().name} wins!`;
+            winningPlayer.textContent = `${gameController.getGame().getCurrPlayer().name} wins!`;
         }
         playerTurnContainer.appendChild(winningPlayer);
     }
@@ -210,9 +232,9 @@ const displayController = (function(){
     function handleCellClick(e){
         const index = e.target.dataset.id;
 
-        game.handlePlayerMove(index);
+        gameController.getGame().handlePlayerMove(index);
 
-        if (game.getWinner() != ''){
+        if (gameController.getGame().getWinner() != ''){
             gameOver();
         } else {
             renderGameboard();
@@ -221,18 +243,25 @@ const displayController = (function(){
     }
 
     function handleNewGameClick(){
-        game.reset();
+        gameController.getGame().reset();
         winningPlayer.remove();
         renderGameboard();
         renderPlayerTurn();
     }
 
     function handleEnterGameClick(){
-        playerOneName = document.getElementById('player-one-name').value;
-        playerTwoName = document.getElementById('player-two-name').value;
-        startGame(playerOneName, playerTwoName);
+        const playerOneName = document.getElementById('player-one-name').value;
+        const playerTwoName = document.getElementById('player-two-name').value;
+        gameController.startGame(playerOneName, playerTwoName);
         initGame();
         showGameScreen();
+    }
+
+    function handleCloseGameClick(){
+        gameController.getGame().reset();
+        showWelcomeScreen();
+        const gameScreen = document.getElementById('game-screen');
+        gameScreen.querySelectorAll('.keep').forEach(el => el.innerHTML = '');
     }
 
     return {

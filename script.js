@@ -213,10 +213,10 @@ const displayController = (function(){
     }
 
     function renderPlayerTurn(){
-        playerTurnContainer.textContent = '';
-        const turnText = document.createElement('h2');
+        // playerTurnContainer.textContent = '';
+        // const turnText = document.createElement('h2');
+        const turnText = document.getElementById('player-turn');
         turnText.textContent =`${gameController.getGame().getCurrPlayer().name}'s turn`; 
-        playerTurnContainer.appendChild(turnText);
     }
 
     function renderWinnerDisplay(){

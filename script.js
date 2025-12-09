@@ -154,6 +154,7 @@ const displayController = (function(){
     closeGameButton.addEventListener('click', handleCloseGameClick);
 
     function initGame(){
+        buildBoardUI();
         renderGameboard();
         renderPlayerTurn();
         renderButtonsContainer();
@@ -174,24 +175,29 @@ const displayController = (function(){
         renderGameboard();
     }
     
-
-    // CREATES ELEMENT
-    function renderGameboard(){
+    function buildBoardUI(){
         boardContainer.textContent = '';
         const grid = document.createElement('div');
         grid.classList.add('grid');
-        
-        let board = Gameboard.getBoard();
 
-        board.forEach((element, index) => {
+        for (let index = 0; index < 9; index++) {
             const cell = document.createElement('div');
             cell.classList.add('cell');
             cell.dataset.id = index;
-            cell.textContent = element;
             cell.addEventListener('click', handleCellClick)
             grid.appendChild(cell);
-        });
+        }
+
         boardContainer.appendChild(grid);
+    }
+
+    function renderGameboard(){
+        const board = Gameboard.getBoard();
+        const cells = boardContainer.querySelectorAll('.cell');
+
+        cells.forEach((cell, index) => {
+            cell.textContent = board[index];
+        })
     }
 
     // CREATES ELEMENT

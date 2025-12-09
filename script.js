@@ -1,6 +1,3 @@
-
-// TODO: COMMIT TO GIT ANNNDDDD FIX THE ADDING OF MORE BUTTONS??
-
 const Gameboard = (function () {
     const board = ['', '', '', '', '', '', '', '', ''];
     
@@ -120,8 +117,6 @@ function gameFlow(playerOne, playerTwo){
     }
 }
 
-
-
 const gameController = (function(){
     const playerOneDefault = { name: "Player 1", marker: "X" };
     const playerTwoDefault = { name: "Player 2", marker: "O" };
@@ -151,8 +146,6 @@ const displayController = (function(){
     const playerTurnContainer = document.getElementById('player-turn-container');
     const boardContainer = document.getElementById('board-container');
     const buttonsContainer = document.getElementById('buttons-container');
-    const currPlayerName = document.createElement('h2');
-    const winningPlayer = document.createElement('h2');
 
     const enterGameButton = document.getElementById('enter-game-button');
     enterGameButton.addEventListener('click', handleEnterGameClick);
@@ -201,11 +194,6 @@ const displayController = (function(){
         boardContainer.appendChild(grid);
     }
 
-    function renderPlayerTurn(){
-        currPlayerName.textContent = `${gameController.getGame().getCurrPlayer().name}'s turn`; 
-        playerTurnContainer.appendChild(currPlayerName);
-    }
-
     // CREATES ELEMENT
     function renderButtonsContainer(){
         const newGameButton = document.createElement('button');
@@ -218,15 +206,23 @@ const displayController = (function(){
 
     }
 
+    function renderPlayerTurn(){
+        playerTurnContainer.textContent = '';
+        const turnText = document.createElement('h2');
+        turnText.textContent =`${gameController.getGame().getCurrPlayer().name}'s turn`; 
+        playerTurnContainer.appendChild(turnText);
+    }
+
     function renderWinnerDisplay(){
-        currPlayerName.remove();
+        playerTurnContainer.textContent = '';
+        const winnerText = document.createElement('h2');
 
         if (gameController.getGame().getWinner() == 'tie'){
-            winningPlayer.textContent = `It's a tie!`;
+            winnerText.textContent = `It's a tie!`;
         } else {
-            winningPlayer.textContent = `${gameController.getGame().getCurrPlayer().name} wins!`;
+            winnerText.textContent = `${gameController.getGame().getCurrPlayer().name} wins!`;
         }
-        playerTurnContainer.appendChild(winningPlayer);
+        playerTurnContainer.appendChild(winnerText);
     }
 
     function handleCellClick(e){
@@ -244,14 +240,14 @@ const displayController = (function(){
 
     function handleNewGameClick(){
         gameController.getGame().reset();
-        winningPlayer.remove();
         renderGameboard();
         renderPlayerTurn();
     }
 
     function handleEnterGameClick(){
-        const playerOneName = document.getElementById('player-one-name').value;
+        let playerOneName = document.getElementById('player-one-name').value;
         const playerTwoName = document.getElementById('player-two-name').value;
+
         gameController.startGame(playerOneName, playerTwoName);
         initGame();
         showGameScreen();

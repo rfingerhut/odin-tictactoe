@@ -171,7 +171,7 @@ const displayController = (function(){
     }
 
     function gameOver(){
-        renderWinnerDisplay();
+        renderPlayerTurn();
         renderGameboard();
     }
     
@@ -213,22 +213,15 @@ const displayController = (function(){
     }
 
     function renderPlayerTurn(){
-        // playerTurnContainer.textContent = '';
-        // const turnText = document.createElement('h2');
         const turnText = document.getElementById('player-turn');
-        turnText.textContent =`${gameController.getGame().getCurrPlayer().name}'s turn`; 
-    }
 
-    function renderWinnerDisplay(){
-        playerTurnContainer.textContent = '';
-        const winnerText = document.createElement('h2');
-
-        if (gameController.getGame().getWinner() == 'tie'){
-            winnerText.textContent = `It's a tie!`;
+        if(!gameController.getGame().getWinner()){
+            turnText.textContent =`${gameController.getGame().getCurrPlayer().name}'s turn`; 
+        } else if (gameController.getGame().getWinner() === 'tie'){
+            turnText.textContent = `It's a tie!`;
         } else {
-            winnerText.textContent = `${gameController.getGame().getCurrPlayer().name} wins!`;
+            turnText.textContent = `${gameController.getGame().getCurrPlayer().name} wins!`;
         }
-        playerTurnContainer.appendChild(winnerText);
     }
 
     function handleCellClick(e){

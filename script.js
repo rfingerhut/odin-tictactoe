@@ -181,6 +181,7 @@ const displayController = (function(){
         buildBoardUI();
         renderGameboard();
         renderPlayerTurn();
+        initPlayerScores();
         renderScores();
         initButtons();
     }
@@ -191,6 +192,14 @@ const displayController = (function(){
         
         const playerTwo = document.getElementById('player-two');
         playerTwo.textContent = gameController.getGame().playerTwo.getScore();
+    }
+
+    function initPlayerScores(){
+        const playerOneName = document.getElementById('player-one-score-name');
+        playerOneName.textContent = `${gameController.getGame().playerOne.name}`;
+
+        const playerTwoName = document.getElementById('player-two-score-name');
+        playerTwoName.textContent = `${gameController.getGame().playerTwo.name}`;
     }
 
     function buildBoardUI(){

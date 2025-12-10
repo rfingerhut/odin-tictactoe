@@ -57,13 +57,30 @@ const Gameboard = (function () {
 
 
 function createPlayer(name, marker){
+    let score = 0;
+
     function placeMarker(index){
         return(Gameboard.placeMarker(index, marker));
+    }
+
+    function updateScore(){
+        score++;
+    }
+
+    function getScore(){
+        return score;
+    }
+
+    function resetScore(){
+        score = 0;
     }
 
     return {
         name, 
         marker, 
+        updateScore,
+        getScore,
+        resetScore,
         placeMarker,
     }
 };
@@ -85,6 +102,7 @@ function gameFlow(playerOne, playerTwo){
         if(currPlayer.placeMarker(index)){
             if(Gameboard.checkWinConditions(currPlayer.marker)){
                 winner = currPlayer;
+                currPlayer.updateScore();
                 gameOver = true;
             } else if (Gameboard.checkTieConditions()){
                 winner = 'tie';
@@ -109,11 +127,19 @@ function gameFlow(playerOne, playerTwo){
         gameOver = false;
     }
 
+    function resetScores(){
+        playerOne.resetScore();
+        playerTwo.resetScore();
+    }
+
     return{
         handlePlayerMove,
         getCurrPlayer,
         getWinner,
         reset,
+        resetScores,
+        playerOne,
+        playerTwo,
     }
 }
 
@@ -135,6 +161,7 @@ const gameController = (function(){
     return{
         startGame,
         getGame,
+        
     }
 })();
 
@@ -154,7 +181,16 @@ const displayController = (function(){
         buildBoardUI();
         renderGameboard();
         renderPlayerTurn();
+        renderScores();
         initButtons();
+    }
+
+    function renderScores(){
+        const playerOne = document.getElementById('player-one');
+        playerOne.textContent = gameController.getGame().playerOne.getScore();
+        
+        const playerTwo = document.getElementById('player-two');
+        playerTwo.textContent = gameController.getGame().playerTwo.getScore();
     }
 
     function buildBoardUI(){
@@ -172,7 +208,7 @@ const displayController = (function(){
 
         boardContainer.appendChild(grid);
     }
-    
+
     function showGameScreen(){
         gameScreen.style.display = 'grid';
         welcomeScreen.style.display = 'none';
@@ -222,6 +258,7 @@ const displayController = (function(){
             turnText.textContent = `It's a tie!`;
         } else {
             turnText.textContent = `${gameController.getGame().getCurrPlayer().name} wins!`;
+            renderScores();
         }
     }
 
@@ -252,6 +289,7 @@ const displayController = (function(){
 
     function handleCloseGameClick(){
         gameController.getGame().reset();
+        gameController.getGame().resetScores();
         showWelcomeScreen();
     }
 })();

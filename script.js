@@ -143,38 +143,20 @@ const gameController = (function(){
 const displayController = (function(){
     const gameScreen = document.getElementById('game-screen');
     const welcomeScreen = document.getElementById('welcome-screen');
-    const playerTurnContainer = document.getElementById('player-turn-container');
+
     const boardContainer = document.getElementById('board-container');
     const buttonsContainer = document.getElementById('buttons-container');
 
     const enterGameButton = document.getElementById('enter-game-button');
     enterGameButton.addEventListener('click', handleEnterGameClick);
 
-    const closeGameButton = document.getElementById('close-game-button');
-    closeGameButton.addEventListener('click', handleCloseGameClick);
-
     function initGame(){
         buildBoardUI();
         renderGameboard();
         renderPlayerTurn();
-        renderButtonsContainer();
+        initButtons();
     }
 
-    function showGameScreen(){
-        gameScreen.style.display = 'grid';
-        welcomeScreen.style.display = 'none';
-    }
-
-    function showWelcomeScreen(){
-        welcomeScreen.style.display = 'flex';
-        gameScreen.style.display = 'none';
-    }
-
-    function gameOver(){
-        renderPlayerTurn();
-        renderGameboard();
-    }
-    
     function buildBoardUI(){
         boardContainer.textContent = '';
         const grid = document.createElement('div');
@@ -190,6 +172,17 @@ const displayController = (function(){
 
         boardContainer.appendChild(grid);
     }
+    
+    function showGameScreen(){
+        gameScreen.style.display = 'grid';
+        welcomeScreen.style.display = 'none';
+    }
+
+    function showWelcomeScreen(){
+        welcomeScreen.style.display = 'flex';
+        gameScreen.style.display = 'none';
+    }
+    
 
     function renderGameboard(){
         const board = Gameboard.getBoard();
@@ -200,16 +193,24 @@ const displayController = (function(){
         })
     }
 
-    // CREATES ELEMENT
-    function renderButtonsContainer(){
+    function initButtons(){
+        if (buttonsContainer.querySelector('.game-button')) return;
+
         const newGameButton = document.createElement('button');
-        newGameButton.classList.add('button');
+        const closeGameButton = document.createElement('button');
+
+        newGameButton.classList.add('button', 'game-button');
+        closeGameButton.classList.add('game-button');
+        closeGameButton.id = 'close-game-button';
+
         newGameButton.textContent = 'New Game';
+        closeGameButton.textContent = 'X Close';
 
         newGameButton.addEventListener('click', handleNewGameClick);
+        closeGameButton.addEventListener('click', handleCloseGameClick);
 
         buttonsContainer.appendChild(newGameButton);
-
+        gameScreen.prepend(closeGameButton);
     }
 
     function renderPlayerTurn(){
@@ -229,16 +230,13 @@ const displayController = (function(){
 
         gameController.getGame().handlePlayerMove(index);
 
-        if (gameController.getGame().getWinner() != ''){
-            gameOver();
-        } else {
-            renderGameboard();
-            renderPlayerTurn();
-        } 
+        renderGameboard();
+        renderPlayerTurn();
     }
 
     function handleNewGameClick(){
         gameController.getGame().reset();
+
         renderGameboard();
         renderPlayerTurn();
     }
@@ -255,13 +253,6 @@ const displayController = (function(){
     function handleCloseGameClick(){
         gameController.getGame().reset();
         showWelcomeScreen();
-        const gameScreen = document.getElementById('game-screen');
-        gameScreen.querySelectorAll('.keep').forEach(el => el.innerHTML = '');
     }
-
-    return {
-        initGame,
-    };
-
 })();
 

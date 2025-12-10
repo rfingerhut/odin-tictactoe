@@ -123,7 +123,6 @@ function gameFlow(playerOne, playerTwo){
     function reset(){
         Gameboard.clearBoard();
         winner = '';
-        currPlayer = playerOne;
         gameOver = false;
     }
 

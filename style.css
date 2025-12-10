@@ -73,6 +73,7 @@ body{
 }
 
 .gameContainer{
+    grid-area: 'game-container';
     display: grid;
     grid-template-areas: 'close-button'
     'playerTurnContainer'
@@ -178,4 +179,42 @@ h2{
     margin-right: 10%;
     margin-top: 5rem;
     cursor: pointer;
+}
+
+.mainContainer{
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-areas: 'game-container'
+    'score-container';
+}
+
+.scoreContainer{
+    grid-area: 'score-container';
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+.scoreContainer div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scoreContainer h3{
+    font-size: 1.5rem;
+    font-weight: 400;
+    padding: 0;
+    margin: 0;
+}
+
+
+.score{
+    border: 1px solid black;
+    font-size: 3rem;
+    margin: 0;
+    padding: 1rem 3rem;
+    margin-bottom: 2rem;
 }

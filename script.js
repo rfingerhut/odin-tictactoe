@@ -220,11 +220,13 @@ const displayController = (function(){
     function showGameScreen(){
         gameScreen.style.display = 'grid';
         welcomeScreen.style.display = 'none';
+        document.getElementById('score-container').style.display = 'flex';
     }
 
     function showWelcomeScreen(){
         welcomeScreen.style.display = 'flex';
         gameScreen.style.display = 'none';
+        document.getElementById('score-container').style.display = 'none';
     }
     
 

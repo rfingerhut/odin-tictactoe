@@ -302,7 +302,12 @@ const displayController = (function(){
     function handleCloseGameClick(){
         gameController.getGame().reset();
         gameController.getGame().resetScores();
+
+        document.getElementById('player-one-name').value = '';
+        document.getElementById('player-two-name').value = '';
         showWelcomeScreen();
+
+
     }
 })();
 

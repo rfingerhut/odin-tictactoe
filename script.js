@@ -172,6 +172,7 @@ const displayController = (function(){
 
     const boardContainer = document.getElementById('board-container');
     const buttonsContainer = document.getElementById('buttons-container');
+    const scoreContainer = document.getElementById('score-container');
 
     const enterGameButton = document.getElementById('enter-game-button');
     enterGameButton.addEventListener('click', handleEnterGameClick);
@@ -246,7 +247,7 @@ const displayController = (function(){
         const closeGameButton = document.createElement('button');
 
         newGameButton.classList.add('button', 'game-button');
-        closeGameButton.classList.add('game-button');
+        closeGameButton.classList.add('button', 'game-button');
         closeGameButton.id = 'close-game-button';
 
         newGameButton.textContent = 'New Round';
@@ -256,7 +257,8 @@ const displayController = (function(){
         closeGameButton.addEventListener('click', handleCloseGameClick);
 
         buttonsContainer.appendChild(newGameButton);
-        gameScreen.prepend(closeGameButton);
+        // gameScreen.prepend(closeGameButton);
+        scoreContainer.appendChild(closeGameButton);
     }
 
     function renderPlayerTurn(){

@@ -249,8 +249,8 @@ const displayController = (function(){
         closeGameButton.classList.add('game-button');
         closeGameButton.id = 'close-game-button';
 
-        newGameButton.textContent = 'New Game';
-        closeGameButton.textContent = 'X Close';
+        newGameButton.textContent = 'New Round';
+        closeGameButton.textContent = 'Exit Game';
 
         newGameButton.addEventListener('click', handleNewGameClick);
         closeGameButton.addEventListener('click', handleCloseGameClick);
